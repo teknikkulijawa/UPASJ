@@ -8,6 +8,6 @@
         name: "user{{ '%03d' | format (item) }}"
         password: "{{ 'password' | password_hash('sha512') }}"
         home: "/home/user{{ '%03d' | format (item) }}"
-      loop: "{{ range(0, 100) }}"
+      loop: "{{ range(1, 101) }}"
       async: 60
       poll: 0
