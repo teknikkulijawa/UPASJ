@@ -7,7 +7,7 @@
 ```
 
 ## Step dibawah mulai dari controller dulu
-1. Biar VMnya ada internetnya dibikin 2 network adapter jangan ganti NATnya ke LAN segment
+1. Biar VMnya ada internetnya dibikin 2 network adapter, network adapter pertama jangan ganti NATnya ke LAN segment, network adapter baru kasih LAN segment
 
 2. Buat clone repository ini, install git dulu:
 ```
@@ -35,8 +35,8 @@ nano README.md
 nano /etc/network/interfaces
 ```
 ```
-auto ens36
-iface ens36 inet static
+auto ens37
+iface ens37 inet static
       address 192.168.69.1/24
 ```
 
@@ -45,17 +45,22 @@ iface ens36 inet static
 nano /etc/network/interfaces
 ```
 ```
-auto ens36
-iface ens36 inet static
+auto ens37
+iface ens37 inet static
       address 192.168.69.2/24
 ```
 
-8. Install Ansible di controller
+8. Install openssh-server di server1, dan ganti PermitRootLogin
+```
+
+```
+
+9. Install Ansible di controller
 ```
 root@controller:~# apt install ansible sshpass -y
 ```
 
-9. SSH ke server1 terus kemudian yes
+10. SSH ke server1 terus kemudian yes
 ```
 root@controller:~# ssh 192.168.69.1
 The authenticity of host '192.168.69.1' can't be established.
@@ -65,7 +70,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 root@server1:~# exit
 ```
 
-10. Jalankan ansible-playbook di controller:
+11. Jalankan ansible-playbook di controller:
 ```
 root@controller:~# ansible-playbook -i hosts create_100_users.yaml
 root@controller:~# ansible-playbook -i hosts dns_server.yaml
