@@ -22,80 +22,40 @@ cd workfolder
 nano README.md
 ```
 
+6. Edit file `/etc/network/interfaces` di server1
+`nano /etc/network/interfaces`
+
+```
+auto ens36
+iface ens36 inet static
+      address 192.168.69.1
+```
+
 5. Edit file `/etc/network/interfaces` di controller
 `nano /etc/network/interfaces`
 
 ```
-auto ens33
-iface ens33 inet static
+auto ens36
+iface ens36 inet static
       address 192.168.69.2
 ```
 
-6. Edit file `/etc/network/interfaces` di server
-`nano /etc/network/interfaces`
 
-```
-auto ens33
-iface ens33 inet static
-      address 192.168.69.1
-```
 
 7. Install Ansible di controller
+`root@controller:~# apt install ansible sshpass -y`
+
+8. Run playbook on controller with
 
 ```
-root@controller:~# apt install ansible sudo
-root@controller:~# usermod -a -G sudo user
+root@controller:~# ansible-playbook -i hosts create_300_users.yaml
+root@controller:~# ansible-playbook -i hosts dns_server.yaml
 ```
 
-DNS config master `(/home/user/named.conf.local > Controller /etc/bind/named.conf.local)`
+Check users on servers with
 
 ```
-zone "cometstar.net.id" {
-  type master;
-  file "/etc/bind/db.internal";
-  allow-transfer { 192.168.69.2; };
-  also-notify { 192.168.69.2; };
-};
-```
-
-Copy default DNS config (install bind9 on operator for config)
-
-```
-ops@operator:~$ sudo apt install bind9
-ops@operator:~$ cp /etc/bind/db.local /home/ops/db.internal
-```
-
-DNS config record `(/etc/bind/db.internal)`
-
-```
-$TTL 604800
-@   IN   SOA  cometstar.net.id. cometstar.net.id. (
-                    2       ; Serial
-               604800       ; Refresh
-                86400       ; Retry
-              2419200       ; Expire
-               604800 )     ; Negative Cache TTL
-;
-@             IN  NS    controller.cometstar.net.id.
-@             IN  A     192.168.69.2
-www           IN  A     192.168.69.2
-mail          IN  A     192.168.69.2
-controller    IN  A     192.168.69.1
-web           IN  A     192.168.69.2
-operator      IN  A     192.168.69.3
-```
-
-Run playbook on operator with
-
-```
-ops@operator:~$ ansible-playbook -i hosts.ini -K create_300_users.yaml
-ops@operator:~$ ansible-playbook -i hosts.ini -K dns_server.yaml
-```
-
-Check users on controller with
-
-```
-root@controller:~# ls /home
+root@server1:~# ls /home
 ```
 
 Install postfix, dovecot on web
