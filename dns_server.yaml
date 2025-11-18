@@ -1,5 +1,5 @@
 - name: Install DNS server
-  hosts: servers
+  hosts: server
   become: yes
 
   tasks:
@@ -9,16 +9,10 @@
         state: latest
 
     - name: Copy DNS database
-      copy: src=db.internal dest=/etc/bind/db.internal
-      when: "{{inventory_hostname=='controller'}}"
+      copy: src=db.local dest=/etc/bind/db.local
 
-    - name: Copy DNS master config
+    - name: Copy DNS config
       copy: src=named.conf.master dest=/etc/bind/named.conf.local
-      when: "{{inventory_hostname=='controller'}}"
-
-    - name: Copy DNS slave config
-      copy: src=named.conf.slave dest=/etc/bind/named.conf.local
-      when: "{{inventory_hostname=='web'}}"
 
     - name: Restart the bind9 service
       service:
