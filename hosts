@@ -1,1 +1,1 @@
-server ansible_host=192.168.69.1 ansible_user=root
+server ansible_host=192.168.69.1 ansible_user=root ansible_password=1
