@@ -22,7 +22,7 @@ cd workfolder
 nano README.md
 ```
 
-6. Edit file `/etc/network/interfaces` di server1
+5. Edit file `/etc/network/interfaces` di server1
 `nano /etc/network/interfaces`
 
 ```
@@ -31,7 +31,7 @@ iface ens36 inet static
       address 192.168.69.1
 ```
 
-5. Edit file `/etc/network/interfaces` di controller
+6. Edit file `/etc/network/interfaces` di controller
 `nano /etc/network/interfaces`
 
 ```
@@ -39,8 +39,6 @@ auto ens36
 iface ens36 inet static
       address 192.168.69.2
 ```
-
-
 
 7. Install Ansible di controller
 `root@controller:~# apt install ansible sshpass -y`
@@ -50,118 +48,6 @@ iface ens36 inet static
 ```
 root@controller:~# ansible-playbook -i hosts create_300_users.yaml
 root@controller:~# ansible-playbook -i hosts dns_server.yaml
-```
-
-Check users on servers with
-
-```
-root@server1:~# ls /home
-```
-
-Install postfix, dovecot on web
-
-```
-root@web:~# apt install postfix dovecot-imapd dovecot-pop3d
-root@web:~# dpkg-reconfigure postfix
-```
-
-Make sure Email has either STARTTLS or SSL/TLS authentication enabled and working.
-
-Postfix config `/etc/postfix/main.cf`
-
-```
-home_mailbox = Maildir/
-```
-
-Postfix config `/etc/postfix/master.cf`
-
-```
-submission inet n - y - - smtpd
-# -o syslog_name=postfix/submission
-  -o smtpd_tls_security_level=encrypt
-  -o smtpd_sasl_auth_enable=yes
-```
-
-```
-smtps inet n - y - - smtpd
-# -o syslog_name=postfix/smtps
-  -o smtpd_tls_wrappermode=yes
-  -o smtpd_sasl_auth_enable=yes
-```
-
-Dovecot config `/etc/dovecot/conf.d/10-mail.conf`
-
-```
-mail_location = maildir:~/Maildir
-```
-
-Dovecot config `/etc/dovecot/conf.d/10-ssl.conf`
-
-```
-ssl_cert = </etc/dovecot/private/dovecot.pem
-ssl_key = </etc/dovecot/private/dovecot.key
-```
-
-Install web server
-
-```
-root@web:~# apt install apache2
-```
-
-Web server content
-
-```
-# echo “<h1>Welcome to the night sky</h1>” > /var/www/html/index.html
-```
-
-You can check index.html if it contains or if accessed shows “Welcome to the night sky” and check if https is working.
-
-Install mariadb and roundcube
-
-```
-root@web:~# apt install mariadb-server
-root@web:~# apt install roundcube
-```
-
-Copy apache vhost mail config from template
-
-```
-root@web:~# cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mail.conf
-root@web:~# a2ensite mail
-```
-
-`/etc/apache2/sites-available/mail.conf`
-
-```
-ServerName mail.cometstar.net.id
-
-ServerAdmin webmaster@cometstar.net.id
-DocumentRoot /var/lib/roundcube/public_html
-```
-
-Install mariadb and roundcube
-
-```
-root@web:~# a2ensite mail
-```
-
-`/etc/roundcube/config.inc.php`
-
-```
-$config['default_host'] = 'mail.cometstar.net.id';
-$config['smtp_server'] = 'mail.cometstar.net.id';
-$config['smtp_port'] = 25;
-$config['smtp_user'] = '';
-$config['smtp_pass'] = '';
-```
-
-ProFTPD is recommended, but if user has already configured vsftpd/pureftpd or similar
-software skip to testing.
-
-`/etc/proftpd/proftpd.conf`
-
-```
-DefaultRoot ~
 ```
 
 Make sure FTP can login using users created by ansible and read/write into the nested
