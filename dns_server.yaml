@@ -27,7 +27,7 @@
     - name: Replace localhost in default-zones
       ansible.builtin.replace:
         path: /etc/bind/named.conf.default-zones
-        regexp: "'localhost'"
+        regexp: '"localhost"'
         replace: 'rajacopet.net'
 
     - name: Restart the bind9 service
