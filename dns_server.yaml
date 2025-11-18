@@ -1,7 +1,5 @@
 - name: Install DNS server
   hosts: server
-  become: yes
-
   tasks:
     - name: Install bind9
       apt:
@@ -25,6 +23,12 @@
         path: /etc/bind/db.local
         regexp: '127.0.0.1'
         replace: '192.168.69.1'
+
+    - name: Replace localhost in default-zones
+      ansible.builtin.replace:
+        path: /etc/bind/named.conf.default-zones
+        regexp: '\'localhost\''
+        replace: 'rajacopet.net'
 
     - name: Restart the bind9 service
       service:
