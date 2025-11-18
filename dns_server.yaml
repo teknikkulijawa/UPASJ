@@ -8,11 +8,23 @@
         name: bind9
         state: latest
 
-    - name: Copy DNS database
-      copy: src=db.local dest=/etc/bind/db.local
+#    - name: Copy DNS database
+#      copy: src=/etc/bind/db.local dest=/etc/bind/db.local
 
-    - name: Copy DNS config
-      copy: src=named.conf.master dest=/etc/bind/named.conf.local
+#    - name: Copy DNS config
+#      copy: src=/etc/bind/named.conf.local dest=/etc/bind/named.conf.local
+
+    - name: Replace localhost
+      ansible.builtin.replace:
+        path: /etc/bind/db.local
+        regexp: 'localhost'
+        replace: 'rajacopet.net'
+
+    - name: Replace 127.0.0.1
+      ansible.builtin.replace:
+        path: /etc/bind/db.local
+        regexp: '127.0.0.1'
+        replace: '192.168.69.1'
 
     - name: Restart the bind9 service
       service:
