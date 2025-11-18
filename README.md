@@ -43,16 +43,19 @@ iface ens36 inet static
 7. Install Ansible di controller
 `root@controller:~# apt install ansible sshpass -y`
 
-8. Run playbook on controller with
+8. SSH ke server1 terus kemudian yes
+```
+root@controller:~# ssh 192.168.69.1
+The authenticity of host '192.168.69.1' can't be established.
+ED25519 key fingerprint is:
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+root@server1:~# exit
+```
+
+9. Jalankan ansible-playbook di controller:
 
 ```
-root@controller:~# ansible-playbook -i hosts create_300_users.yaml
+root@controller:~# ansible-playbook -i hosts create_100_users.yaml
 root@controller:~# ansible-playbook -i hosts dns_server.yaml
-```
-
-Make sure FTP can login using users created by ansible and read/write into the nested
-directory. You can use FileZilla program on Operator.
-
-```
-ops@operator:~$ sudo apt install filezilla
 ```
