@@ -28,7 +28,25 @@
       ansible.builtin.replace:
         path: /etc/bind/named.conf.default-zones
         regexp: '"localhost"'
+        replace: '"rajacopet.net"'
+
+    - name: Replace localhost
+      ansible.builtin.replace:
+        path: /etc/bind/db.127
+        regexp: 'localhost'
         replace: 'rajacopet.net'
+
+    - name: Replace 127.0.0.1
+      ansible.builtin.replace:
+        path: /etc/bind/db.127
+        regexp: '1.0.0'
+        replace: '1'
+
+    - name: Replace l27.in-addr.arpa in default-zones
+      ansible.builtin.replace:
+        path: /etc/bind/named.conf.default-zones
+        regexp: '"l27.in-addr.arpa"'
+        replace: '"69.168.192.in-addr.arpa"'
 
     - name: Restart the bind9 service
       service:
