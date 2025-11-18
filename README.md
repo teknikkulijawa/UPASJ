@@ -8,44 +8,50 @@
 
 ## Step dibawah mulai dari controller dulu
 1. Buat clone repository ini, install git dulu:
-
-`apt install git -y`
+```
+apt install git -y
+```
 
 2. Clone repository ini pake perintah:
-
-`git clone https://github.com/teknikkulijawa/UPASJ`
+```
+git clone https://github.com/teknikkulijawa/UPASJ
+```
 
 3. Ganti nama folder UPASJ ini ke workfolder
+```
+mv UPASJ workfolder
+```
 
-`mv UPASJ workfolder`
-
-4. Bisa cek catatan ini juga di foldernya dengan cara:
+5. Bisa cek catatan ini juga di foldernya dengan cara:
 ```
 cd workfolder
 nano README.md
 ```
 
 5. Edit file `/etc/network/interfaces` di server1
-
-`nano /etc/network/interfaces`
+```
+nano /etc/network/interfaces
+```
 ```
 auto ens36
 iface ens36 inet static
-      address 192.168.69.1
+      address 192.168.69.1/24
 ```
 
 6. Edit file `/etc/network/interfaces` di controller
-
-`nano /etc/network/interfaces`
+```
+nano /etc/network/interfaces
+```
 ```
 auto ens36
 iface ens36 inet static
-      address 192.168.69.2
+      address 192.168.69.2/24
 ```
 
 7. Install Ansible di controller
-
-`root@controller:~# apt install ansible sshpass -y`
+```
+root@controller:~# apt install ansible sshpass -y
+```
 
 8. SSH ke server1 terus kemudian yes
 ```
