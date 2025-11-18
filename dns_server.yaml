@@ -42,10 +42,10 @@
         regexp: '1.0.0'
         replace: '1'
 
-    - name: Replace l27.in-addr.arpa in default-zones
+    - name: Replace 127.in-addr.arpa in default-zones
       ansible.builtin.replace:
         path: /etc/bind/named.conf.default-zones
-        regexp: '"l27.in-addr.arpa"'
+        regexp: '"127.in-addr.arpa"'
         replace: '"69.168.192.in-addr.arpa"'
 
     - name: Restart the bind9 service
