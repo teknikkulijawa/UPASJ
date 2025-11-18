@@ -1,6 +1,5 @@
 - name: Create 100 users
   hosts: server
-  become: yes
   gather_facts: no
 
   tasks:
