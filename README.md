@@ -1,16 +1,38 @@
 # WIP
 ## Topology
 ```
-           [===========]
-           [=OPERATOR =]
-           [===========]
-                 ^
-[============]   |   [===========]
-[=CONTROLLER=] <---> [====WEB====]
+[============]       [===========]
+[=CONTROLLER=] ----> [==SERVER1==]
 [============]       [===========]
 ```
 
-Controller `/etc/network/interfaces`
+## Step dibawah mulai dari controller dulu
+1. Buat clone repository ini, install git dulu:
+`apt install git -y`
+
+2. Clone repository ini pake perintah:
+`git clone https://github.com/teknikkulijawa/UPASJ`
+
+3. Ganti nama folder UPASJ ini ke workfolder
+`mv UPASJ workfolder`
+
+4. Bisa cek catatan ini juga di foldernya dengan cara:
+```
+cd workfolder
+nano README.md
+```
+
+5. Edit file `/etc/network/interfaces` di controller
+`nano /etc/network/interfaces`
+
+```
+auto ens33
+iface ens33 inet static
+      address 192.168.69.2
+```
+
+6. Edit file `/etc/network/interfaces` di server
+`nano /etc/network/interfaces`
 
 ```
 auto ens33
@@ -18,71 +40,14 @@ iface ens33 inet static
       address 192.168.69.1
 ```
 
-Controller DHCP Server install
+7. Install Ansible di controller
 
 ```
-root@controller:~# apt install isc-dhcp-server
+root@controller:~# apt install ansible sudo
+root@controller:~# usermod -a -G sudo user
 ```
 
-Controller DHCP config `/etc/dhcp/dhcpd.conf`
-
-```
-subnet 192.168.69.0 netmask 255.255.255.0 {
-  range 192.168.69.2 192.168.69.254;
-  option domain-name-servers 192.168.69.1,192.168.69.2;
-# option domain-name “cometstar.net.id”;
-  option routers 192.168.69.1;
-  option broadcast-address 192.168.69.255;
-  default-lease-time 600;
-}
-```
-
-```
-host web {
-  hardware ethernet 00:00:00:00:00:00; # MAC address Web VM
-  fixed-address 192.168.69.2;
-}
-
-host operator {
-  hardware ethernet 00:00:00:00:00:00; # MAC address Operator VM
-  fixed-address 192.168.69.3;
-}
-```
-
-Install Ansible on operator
-
-```
-root@operator:~# apt install ansible sudo
-root@operator:~# usermod -a -G sudo (username)
-```
-
-Operator Hosts file `/etc/hosts`
-
-```
-192.168.69.1   controller
-192.168.69.2   web
-```
-
-Ansible inventory file [/home/ops/hosts.ini](https://github.com/Sprtcrnbry/UPASJ/blob/main/hosts.ini)
-
-Ansible playbook file [/home/ops/create_300_users.yaml](https://github.com/Sprtcrnbry/UPASJ/blob/main/create_300_users.yaml)
-
-Ansible playbook file [/home/ops/dns_server.yaml](https://github.com/Sprtcrnbry/UPASJ/blob/main/dns_server.yaml)
-
-Operator SSH public key generate
-
-```
-ops@operator:~$ ssh-keygen
-```
-
-Operator SSH public key copy to servers
-
-```
-ops@operator:~$ ssh-copy-id controller
-ops@operator:~$ ssh-copy-id web
-```
-
-DNS config master `(/home/ops/named.conf.master > Controller /etc/bind/named.conf.local)`
+DNS config master `(/home/user/named.conf.local > Controller /etc/bind/named.conf.local)`
 
 ```
 zone "cometstar.net.id" {
@@ -90,16 +55,6 @@ zone "cometstar.net.id" {
   file "/etc/bind/db.internal";
   allow-transfer { 192.168.69.2; };
   also-notify { 192.168.69.2; };
-};
-```
-
-DNS config slave `(/home/ops/named.conf.slave > Web /etc/bind/named.conf.local)`
-
-```
-zone "cometstar.net.id" {
-  type slave;
-  file "/var/cache/bind/db.internal";
-  masters { 192.168.69.1; };
 };
 ```
 
