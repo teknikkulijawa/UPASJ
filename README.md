@@ -52,7 +52,8 @@ iface ens37 inet static
 
 8. Install openssh-server di server1, dan ganti PermitRootLogin
 ```
-
+nano /etc/ssh/sshd_config
+PermitRootLogin yes
 ```
 
 9. Install Ansible di controller
@@ -72,6 +73,6 @@ root@server1:~# exit
 
 11. Jalankan ansible-playbook di controller:
 ```
-root@controller:~# ansible-playbook -i hosts create_100_users.yaml
-root@controller:~# ansible-playbook -i hosts dns_server.yaml
+root@controller:~/workfolder# ansible-playbook -i hosts create_100_users.yaml
+root@controller:~/workfolder# ansible-playbook -i hosts dns_server.yaml
 ```
