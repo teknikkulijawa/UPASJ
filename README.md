@@ -11,28 +11,28 @@
 
 2. Buat clone repository ini, install git dulu:
 ```
-apt install git -y
+root@controller:~# apt install git -y
 ```
 
 3. Clone repository ini pake perintah:
 ```
-git clone https://github.com/teknikkulijawa/UPASJ
+root@controller:~# git clone https://github.com/teknikkulijawa/UPASJ
 ```
 
 4. Ganti nama folder UPASJ ini ke workfolder
 ```
-mv UPASJ workfolder
+root@controller:~# mv UPASJ workfolder
 ```
 
 5. Bisa cek catatan ini juga di foldernya dengan cara:
 ```
-cd workfolder
-nano README.md
+root@controller:~# cd workfolder
+root@controller:~/workfolder# nano README.md
 ```
 
 6. Edit file `/etc/network/interfaces` di server1
 ```
-nano /etc/network/interfaces
+root@server1:~# nano /etc/network/interfaces
 ```
 ```
 auto ens37
@@ -42,7 +42,7 @@ iface ens37 inet static
 
 7. Edit file `/etc/network/interfaces` di controller
 ```
-nano /etc/network/interfaces
+root@controller:~# nano /etc/network/interfaces
 ```
 ```
 auto ens37
@@ -52,7 +52,7 @@ iface ens37 inet static
 
 8. Install openssh-server di server1, dan ganti PermitRootLogin
 ```
-nano /etc/ssh/sshd_config
+root@server1:~# nano /etc/ssh/sshd_config
 PermitRootLogin yes
 ```
 
@@ -73,6 +73,7 @@ root@server1:~# exit
 
 11. Jalankan ansible-playbook di controller:
 ```
+root@controller:~# cd workfolder
 root@controller:~/workfolder# ansible-playbook -i hosts create_100_users.yaml
 root@controller:~/workfolder# ansible-playbook -i hosts dns_server.yaml
 ```
