@@ -7,7 +7,7 @@
 ```
 
 ## Step dibawah mulai dari controller dulu
-1. Biar VMnya ada internetnya dibikin 2 network adapter, network adapter pertama jangan ganti NATnya ke LAN segment, network adapter baru kasih LAN segment
+1. Biar VMnya ada internetnya dibikin 2 network adapter, network adapter pertama jangan ganti NATnya ke LAN segment, network adapter baru/kedua kasih LAN segment
 
 2. Buat clone repository ini, install git dulu:
 ```
